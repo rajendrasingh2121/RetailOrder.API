@@ -12,8 +12,8 @@ namespace RetailOrder.API.Models.Dtos
 
         public double OrderTotal { get; set; } 
         public string Address { get; set; }
-
-        // public sting OrderStatus
+        public string Status { get; set; }
+       
         public List<OrderLineItem> OrderDetails { get; set; }
     }
 }

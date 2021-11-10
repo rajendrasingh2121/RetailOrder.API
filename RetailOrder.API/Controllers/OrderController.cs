@@ -33,12 +33,19 @@ namespace RetailOrder.API.Controllers
 
         [HttpPut]
         [Route("UpdateOrderAddress")]
-        public async Task<object> UpdateOrderAddress([FromBody] OrderDTO orderDto)
+        public async Task<object> UpdateOrderAddress(Guid orderId, string newAddress)
         {
-            return await _orderService.AddOrder(orderDto);
+            return await _orderService.UpdateOrderAddress(orderId,newAddress);
 
         }
 
+        [HttpPut]
+        [Route("UpdateOrderDetails")]
+        public async Task<object> UpdateOrderDetails(Guid orderId, [FromBody] List<OrderLineItemDTO> orderDto)
+        {
+            return await _orderService.UpdateOrderItemDetails(orderId,orderDto);
+
+        }
 
         [HttpPut]
         [Route("CancelOrder")]

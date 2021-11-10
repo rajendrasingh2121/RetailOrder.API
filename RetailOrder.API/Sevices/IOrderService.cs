@@ -13,7 +13,7 @@ namespace RetailOrder.API.Sevices
         Task<bool> AddOrder(OrderDTO order);
         Task<bool> UpdateOrderAddress(Guid orderId, string address);
 
-        Task<OrderDTO> UpdateOrderItemDetails(Guid orderId, List<OrderLineItem> orderItemDetails);
+        Task<OrderDTO> UpdateOrderItemDetails(Guid orderId, List<OrderLineItemDTO> orderItemDetails);
         Task<bool> CancelOrder(Guid orderId);
         Task<OrderDTO> GetOrderById(Guid ownerId);
 

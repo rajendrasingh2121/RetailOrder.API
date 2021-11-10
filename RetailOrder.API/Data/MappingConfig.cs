@@ -17,7 +17,8 @@ namespace RetailOrder.API
 
                 config.CreateMap<OrderDTO, Order>();
                 config.CreateMap<Order, OrderDTO>();
-               
+                config.CreateMap<OrderLineItem, OrderLineItemDTO>();
+                config.CreateMap< OrderLineItemDTO, OrderLineItem>();
             });
             _iMapper = mapperConfig.CreateMapper();
         }

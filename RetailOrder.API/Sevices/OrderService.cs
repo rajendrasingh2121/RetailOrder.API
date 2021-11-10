@@ -60,9 +60,10 @@ namespace RetailOrder.API.Sevices
             return _orderRepository.UpdateOrderAddress(orderId, address);
         }       
 
-        public async Task<OrderDTO> UpdateOrderItemDetails(Guid orderId, List<OrderLineItem> orderItemDetails)
+        public async Task<OrderDTO> UpdateOrderItemDetails(Guid orderId, List<OrderLineItemDTO> orderItemDetails)
         {
-            Order order = await _orderRepository.UpdateOrderItemDetails(orderId, orderItemDetails);
+            List<OrderLineItem> orderdetails = _mapper._iMapper.Map<List<OrderLineItemDTO>, List<OrderLineItem>>(orderItemDetails);
+            Order order = await _orderRepository.UpdateOrderItemDetails(orderId, orderdetails);
             OrderDTO orderDto = _mapper._iMapper.Map<Order,OrderDTO>(order);
             return orderDto;
         }
