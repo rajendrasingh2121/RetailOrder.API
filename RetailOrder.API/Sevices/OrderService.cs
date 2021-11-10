@@ -18,7 +18,22 @@ namespace RetailOrder.API.Sevices
         {
             _orderRepository = orderRepository;
             _mapper = mapper;
-        }     
+        }
+
+
+        public async Task<OrderDTO> GetOrderById(Guid orderId)
+        {
+            Order order = await _orderRepository.GetOrderById(orderId);
+            OrderDTO orderDto = _mapper._iMapper.Map<Order, OrderDTO>(order);
+            return orderDto;
+        }
+
+        public PagedResultsDTO<OrderDTO> GetOrders(OrderPaginationParameter orderPaginationParameter)
+        {
+            PagedList<Order> orders = _orderRepository.GetOrders(orderPaginationParameter);
+            return _mapper.MapOrdersToPageResultDTOList(orders);
+        }
+
 
         public Task<bool> AddOrder(OrderDTO orderDto)
         {
@@ -39,42 +54,24 @@ namespace RetailOrder.API.Sevices
             return _orderRepository.AddOrder(order);
         }
 
-     
 
-        public Task<bool> CancelOrder(Guid orderId)      
-        {         
-            return _orderRepository.CancelOrder(orderId);
-        }
-
-
-        public PagedResultsDTO<OrderDTO> GetOrders(OrderPaginationParameter orderPaginationParameter)
-        {
-            PagedList<Order> orders = _orderRepository.GetOrders(orderPaginationParameter);
-
-            return _mapper.MapOrdersToPageResultDTOList(orders);
-        }
-
-     
         public Task<bool> UpdateOrderAddress(Guid orderId, string address)
         {
             return _orderRepository.UpdateOrderAddress(orderId, address);
-        }       
+        }
 
         public async Task<OrderDTO> UpdateOrderItemDetails(Guid orderId, List<OrderLineItemDTO> orderItemDetails)
         {
             List<OrderLineItem> orderdetails = _mapper._iMapper.Map<List<OrderLineItemDTO>, List<OrderLineItem>>(orderItemDetails);
             Order order = await _orderRepository.UpdateOrderItemDetails(orderId, orderdetails);
-            OrderDTO orderDto = _mapper._iMapper.Map<Order,OrderDTO>(order);
-            return orderDto;
-        }
-
-       public async Task<OrderDTO> GetOrderById(Guid orderId)
-        {
-            Order order = await _orderRepository.GetOrderById(orderId);
             OrderDTO orderDto = _mapper._iMapper.Map<Order, OrderDTO>(order);
             return orderDto;
         }
 
-      
+        public Task<bool> CancelOrder(Guid orderId)      
+        {         
+            return _orderRepository.CancelOrder(orderId);
+        }            
+       
     }
 }

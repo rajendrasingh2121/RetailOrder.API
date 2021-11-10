@@ -5,6 +5,7 @@ using RetailOrder.API.Helpers;
 using RetailOrder.API.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -13,8 +14,7 @@ namespace RetailOrder.API.Repository
 {
     public class OrderRepository : IOrderRepository
     {
-        private readonly ApplicationDbContext _db;
-    
+        private readonly ApplicationDbContext _db;    
 
         public OrderRepository(ApplicationDbContext applicationDbContext)
         {
@@ -29,8 +29,6 @@ namespace RetailOrder.API.Repository
 				orderParameters.PageSize);
 		}
 
-		
-
 	
         public async Task<bool> AddOrder(Order order)
         {
@@ -40,10 +38,10 @@ namespace RetailOrder.API.Repository
                 await _db.SaveChangesAsync();
                 return true;
             }
-            catch (Exception)
+            catch (DbException)
             {
 
-                return false;
+                throw;
             }
 
         }
@@ -63,10 +61,10 @@ namespace RetailOrder.API.Repository
                 await _db.SaveChangesAsync();
                 return true;
             }
-            catch (Exception)
+            catch (DbException)
             {
 
-                return false;
+                throw;
             }
         }
 
@@ -84,16 +82,13 @@ namespace RetailOrder.API.Repository
                 await _db.SaveChangesAsync();
                 return order;
             }
-            catch (Exception)
+            catch (DbException)
             {
 
-                return null;
+                throw;
             }
         }
 
-      
-
-        
 
         public IQueryable<Order> FindAll()
         {           
@@ -107,6 +102,12 @@ namespace RetailOrder.API.Repository
             return _db.Orders.Include(o => o.OrderDetails).Where(order => order.OrderId.Equals(orderId))            
                 .FirstOrDefaultAsync();
         }
+
+        /// <summary>
+        /// Cancel order
+        /// </summary>
+        /// <param name="orderId"></param>
+        /// <returns></returns>
         public async Task<bool> CancelOrder(Guid orderId)
         {
             try
@@ -121,11 +122,7 @@ namespace RetailOrder.API.Repository
                 await _db.SaveChangesAsync();
                 return true;
             }
-            catch (Exception)
-            {
-
-                return false;
-            }
+            catch (DbException) { throw; }
         }
        
     }
